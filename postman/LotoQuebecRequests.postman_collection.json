@@ -1,0 +1,27 @@
+{
+	"info": {
+		"_postman_id": "a8de2f5d-c25b-4118-a297-1cba95e3ce12",
+		"name": "LotoQuebecRequests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET last results",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}:{{port}}/{{last_results}}",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"{{last_results}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
