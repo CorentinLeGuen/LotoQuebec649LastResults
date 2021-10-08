@@ -20,6 +20,20 @@
 			"response": []
 		},
 		{
+			"name": "GET stats",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localhost}}{{stats}}",
+					"host": [
+						"{{localhost}}{{stats}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "GET URL source",
 			"request": {
 				"method": "GET",

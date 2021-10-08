@@ -31,3 +31,16 @@ You will get a result like this one :
     "numberComp": "31"
 }
 ```
+
+To get some stats :
+`http://localhost:8080/loto/stats`
+
+You will get something like :
+```json
+{
+    "tirages": "3935",
+    "date_debut": "1982-06-12",
+    "date_fin": "2021-10-06",
+    "numeros": []
+}
+```
