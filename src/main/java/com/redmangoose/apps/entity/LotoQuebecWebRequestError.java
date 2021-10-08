@@ -1,23 +1,28 @@
 package com.redmangoose.apps.entity;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class LotoQuebecWebRequestError implements LotoQuebecObject {
     private final String status;
-    private final List<String> errors;
+    private final String error;
+    private final String timestamp;
 
     public LotoQuebecWebRequestError() {
         this.status = "500";
-        this.errors = new ArrayList<>();
-        this.errors.add("Unable to contact the server.");
+        this.error = "Unable to contact the server";
+        this.timestamp = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
     }
 
     public String getStatus() {
         return status;
     }
 
-    public List<String> getErrors() {
-        return errors;
+    public String getError() {
+        return error;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
     }
 }
