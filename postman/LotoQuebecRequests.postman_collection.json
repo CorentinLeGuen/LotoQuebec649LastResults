@@ -7,13 +7,26 @@
 	"item": [
 		{
 			"name": "GET last results",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is ok\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{localhost}}{{last_results}}",
+					"raw": "{{host}}{{last_results}}",
 					"host": [
-						"{{localhost}}{{last_results}}"
+						"{{host}}{{last_results}}"
 					]
 				}
 			},
@@ -21,13 +34,26 @@
 		},
 		{
 			"name": "GET stats",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is ok\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{localhost}}{{stats}}",
+					"raw": "{{host}}{{stats}}",
 					"host": [
-						"{{localhost}}{{stats}}"
+						"{{host}}{{stats}}"
 					]
 				}
 			},
@@ -35,13 +61,26 @@
 		},
 		{
 			"name": "GET URL source",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is ok\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{localhost}}{{source}}",
+					"raw": "{{host}}{{source}}",
 					"host": [
-						"{{localhost}}{{source}}"
+						"{{host}}{{source}}"
 					]
 				}
 			},
