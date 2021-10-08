@@ -12,6 +12,9 @@ Everything is in [pom.xml](pom.xml).
 
 You can find the postman collection [here](/postman/).
 
+To get the results source URL :
+`localhost:8080/loto/source`
+
 To get the last results :
 `localhost:8080/loto/last`
 

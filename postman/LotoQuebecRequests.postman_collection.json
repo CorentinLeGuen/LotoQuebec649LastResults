@@ -11,13 +11,23 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}:{{port}}/{{last_results}}",
+					"raw": "{{localhost}}{{last_results}}",
 					"host": [
-						"{{host}}"
-					],
-					"port": "{{port}}",
-					"path": [
-						"{{last_results}}"
+						"{{localhost}}{{last_results}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET URL source",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localhost}}{{source}}",
+					"host": [
+						"{{localhost}}{{source}}"
 					]
 				}
 			},
