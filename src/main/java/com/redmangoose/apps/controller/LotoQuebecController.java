@@ -2,6 +2,7 @@ package com.redmangoose.apps.controller;
 
 import com.redmangoose.apps.LotoClientService;
 import com.redmangoose.apps.entity.LotoQuebecObject;
+import com.redmangoose.apps.entity.LotoQuebecStatistiques;
 import com.redmangoose.apps.entity.LotoQuebecTirage;
 import com.redmangoose.apps.entity.LotoQuebecWebRequestError;
 import org.slf4j.Logger;
@@ -32,12 +33,25 @@ public class LotoQuebecController {
         return new ResponseEntity<>(tirage, HttpStatus.OK);
     }
 
+    @GetMapping(value = "stats", produces = "application/json")
+    public ResponseEntity<LotoQuebecObject> getStats() {
+        log.info("Asking for stats");
+        LotoClientService service = new LotoClientService();
+        LotoQuebecStatistiques stats = service.getLastLotoStatistics();
+        if (stats == null) {
+            log.error("Unable to get stats results");
+            return new ResponseEntity<>(new LotoQuebecWebRequestError(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(stats, HttpStatus.OK);
+    }
+
     @GetMapping(value = "source", produces = "application/json")
     public ResponseEntity<Map<String, String>> getResultSources() {
         log.info("Asking the URL source");
         LotoClientService service = new LotoClientService();
         Map<String, String> result = new HashMap<>();
-        result.put("URL", service.getLotoQuebecURL());
+        result.put("last", service.getLotoQuebecLastResultsURL());
+        result.put("stats", service.getLotoQuebecStatsURL());
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }
