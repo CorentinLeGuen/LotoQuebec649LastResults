@@ -4,22 +4,40 @@ import com.redmangoose.apps.LotoClientService;
 import com.redmangoose.apps.entity.LotoQuebecObject;
 import com.redmangoose.apps.entity.LotoQuebecTirage;
 import com.redmangoose.apps.entity.LotoQuebecWebRequestError;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Controller
 @RequestMapping("loto")
 public class LotoQuebecController {
-    @GetMapping(value = "/last", produces = "application/json")
+    private final Logger log = LoggerFactory.getLogger(LotoQuebecController.class);
+
+    @GetMapping(value = "last", produces = "application/json")
     public ResponseEntity<LotoQuebecObject> getLastDraw() {
+        log.info("Asking last results");
         LotoClientService service = new LotoClientService();
         LotoQuebecTirage tirage = service.getLastLotoResults();
         if (tirage == null) {
+            log.error("Unable to retrieve results");
             return new ResponseEntity<>(new LotoQuebecWebRequestError(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(tirage, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "source", produces = "application/json")
+    public ResponseEntity<Map<String, String>> getResultSources() {
+        log.info("Asking the URL source");
+        LotoClientService service = new LotoClientService();
+        Map<String, String> result = new HashMap<>();
+        result.put("URL", service.getLotoQuebecURL());
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }
