@@ -1,18 +1,15 @@
-package com.redmangoose.apps;
+package com.redmangoose.apps.service;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.*;
-import com.redmangoose.apps.entity.LotoQuebecFrequence;
-import com.redmangoose.apps.entity.LotoQuebecStatistiques;
-import com.redmangoose.apps.entity.LotoQuebecTirage;
+import com.redmangoose.apps.entity.stats.LotoQuebecFrequence;
+import com.redmangoose.apps.entity.stats.LotoQuebecStatistiques;
+import com.redmangoose.apps.entity.last_draw.LotoQuebecTirage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 public class LotoClientService {

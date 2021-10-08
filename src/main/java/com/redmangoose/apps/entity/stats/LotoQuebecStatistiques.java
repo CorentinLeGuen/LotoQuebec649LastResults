@@ -1,4 +1,7 @@
-package com.redmangoose.apps.entity;
+package com.redmangoose.apps.entity.stats;
+
+import com.redmangoose.apps.entity.LotoQuebecObject;
+import com.redmangoose.apps.entity.stats.LotoQuebecFrequence;
 
 import java.util.LinkedList;
 import java.util.List;

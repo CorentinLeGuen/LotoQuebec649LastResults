@@ -1,4 +1,6 @@
-package com.redmangoose.apps.entity;
+package com.redmangoose.apps.entity.last_draw;
+
+import com.redmangoose.apps.entity.LotoQuebecObject;
 
 public class LotoQuebecTirage implements LotoQuebecObject {
     private String date_tirage;
