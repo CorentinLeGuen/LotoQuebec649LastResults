@@ -3,13 +3,13 @@ DROP TABLE IF EXISTS tirage;
 CREATE TABLE tirage (
     id INT AUTO_INCREMENT PRIMARY KEY,
     date_tirage VARCHAR(10),
-    numero_1 TINYINT,
-    numero_2 TINYINT,
-    numero_3 TINYINT,
-    numero_4 TINYINT,
-    numero_5 TINYINT,
-    numero_6 TINYINT,
-    numero_complementaire TINYINT
+    numero_1 INT,
+    numero_2 INT,
+    numero_3 INT,
+    numero_4 INT,
+    numero_5 INT,
+    numero_6 INT,
+    numero_complementaire INT
 );
 
 INSERT INTO tirage(date_tirage, numero_1, numero_2, numero_3, numero_4, numero_5, numero_6, numero_complementaire) VALUES

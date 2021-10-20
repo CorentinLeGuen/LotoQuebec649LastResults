@@ -44,3 +44,9 @@ You will get something like :
     "numeros": []
 }
 ```
+
+To get all saved records :
+`localhost:8080/loto`
+
+You can search for only one record by adding the parameter "date" to this endpoint :
+`localhost:8080/loto?date=1982-07-24`
