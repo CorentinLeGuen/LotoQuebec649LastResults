@@ -6,6 +6,7 @@ import com.redmangoose.apps.entity.last_draw.LotoQuebecTirage;
 import com.redmangoose.apps.entity.stats.LotoQuebecFrequencesStats;
 import com.redmangoose.apps.service.LotoQuebecTirageService;
 import com.redmangoose.apps.util.LotoClientWebClient;
+import com.redmangoose.apps.util.LotoQuebecURLs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -65,8 +66,10 @@ public class LotoQuebecController {
         log.info("Asking the URL source");
         LotoClientWebClient service = new LotoClientWebClient();
         Map<String, String> result = new HashMap<>();
-        result.put("last", service.getLotoQuebecLastResultsURL());
-        result.put("stats", service.getLotoQuebecStatsURL());
+        result.put("timestamp", LocalDateTime.now().toString());
+        result.put("/loto/last", LotoQuebecURLs.LOTO_QUEBEC_LAST_RESULTS_URL.toString());
+        result.put("/loto/stats", LotoQuebecURLs.LOTO_QUEBEC_STATS_URL.toString());
+        result.put("/loto?date=yyyy-MM-dd", LotoQuebecURLs.LOTO_QUEBEC_RESULTS_URL.toString());
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 

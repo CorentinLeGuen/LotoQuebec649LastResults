@@ -18,9 +18,6 @@ import java.util.Locale;
 public class LotoClientWebClient {
     private final Logger log = LoggerFactory.getLogger(LotoClientWebClient.class);
 
-    private final String LOTO_QUEBEC_LAST_RESULTS_URL = "https://loteries.lotoquebec.com/fr/resultats";
-    private final String LOTO_QUEBEC_STATS_URL = "https://loteries.lotoquebec.com/fr/loteries/lotto-6-49?outil=statistiques-212#lqTableauStatsAVie";
-
     private final String DATE_TIME_FORMAT_PATTERN = "dd MMM yyyy";
     private final String ISO_LOCAL_DATE = "yyyy-MM-dd";
 
@@ -30,7 +27,7 @@ public class LotoClientWebClient {
             final WebClient client = new WebClient();
             client.getOptions().setCssEnabled(false);
             client.getOptions().setJavaScriptEnabled(false);
-            final HtmlPage page = client.getPage(LOTO_QUEBEC_LAST_RESULTS_URL);
+            final HtmlPage page = client.getPage(LotoQuebecURLs.LOTO_QUEBEC_LAST_RESULTS_URL.toString());
             log.debug("Retreive XPaths");
             final String dateTirage = ((HtmlDivision) page.getByXPath("/html/body/div[2]/div[2]/section/div[2]/div[1]/div/div/div/div/div[1]/div/div[2]/div[2]/div/div").get(0)).getFirstChild().getNodeValue();
             final String number1 = ((HtmlSpan) page.getByXPath("/html/body/div[2]/div[2]/section/div[2]/div[1]/div/div/div/div/div[1]/div/div[3]/span[1]").get(0)).getFirstChild().getNodeValue();
@@ -74,7 +71,7 @@ public class LotoClientWebClient {
             final WebClient client = new WebClient();
             client.getOptions().setCssEnabled(false);
             client.getOptions().setJavaScriptEnabled(false);
-            final HtmlPage page = client.getPage(LOTO_QUEBEC_STATS_URL);
+            final HtmlPage page = client.getPage(LotoQuebecURLs.LOTO_QUEBEC_STATS_URL.toString());
             log.debug("Retreive XPaths");
             final String secondLineText = page.getByXPath("/html/body/div[2]/div[2]/section/div[2]/div[4]/div/div/div[2]/div/div[2]/div/div[3]/div[1]/table/thead/tr[1]/th/p/text()[2]").get(0).toString();
             final String thirdLineText = page.getByXPath("/html/body/div[2]/div[2]/section/div[2]/div[4]/div/div/div[2]/div/div[2]/div/div[3]/div[1]/table/thead/tr[1]/th/p/text()[3]").get(0).toString();
@@ -102,13 +99,5 @@ public class LotoClientWebClient {
             log.error("An error occurred while retrieving loto stats : '{}'", exception.getMessage());
             return null;
         }
-    }
-
-    public String getLotoQuebecLastResultsURL() {
-        return LOTO_QUEBEC_LAST_RESULTS_URL;
-    }
-
-    public String getLotoQuebecStatsURL() {
-        return LOTO_QUEBEC_STATS_URL;
     }
 }
