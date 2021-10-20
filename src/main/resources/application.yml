@@ -11,8 +11,7 @@ spring:
     password:
   h2:
     console:
-      enabled: true
-      path: /h2
+      enabled: false
   jpa:
     hibernate:
       ddl-auto: none
