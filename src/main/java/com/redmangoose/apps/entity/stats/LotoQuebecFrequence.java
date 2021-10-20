@@ -1,4 +1,4 @@
-package com.redmangoose.apps.entity;
+package com.redmangoose.apps.entity.stats;
 
 public class LotoQuebecFrequence {
     private final String numero;

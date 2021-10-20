@@ -6,14 +6,191 @@
 	},
 	"item": [
 		{
-			"name": "GET last results",
+			"name": "Errors and exceptions",
+			"item": [
+				{
+					"name": "GET specific record who doesn't exists",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is nok\", function () {\r",
+									"  pm.response.to.have.status(404);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{base}}?date=1982-07-22",
+							"host": [
+								"{{host}}{{base}}"
+							],
+							"query": [
+								{
+									"key": "date",
+									"value": "1982-07-22"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET specific record whit malformed date",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is nok\", function () {\r",
+									"  pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{base}}?date=1982-37-22",
+							"host": [
+								"{{host}}{{base}}"
+							],
+							"query": [
+								{
+									"key": "date",
+									"value": "1982-37-22"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET specific record whit malformed another malformed date",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is nok\", function () {\r",
+									"  pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{base}}?date=1982-07-2",
+							"host": [
+								"{{host}}{{base}}"
+							],
+							"query": [
+								{
+									"key": "date",
+									"value": "1982-07-2"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "GET all records",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is ok\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{localhost}}{{last_results}}",
+					"raw": "{{host}}{{stats}}",
 					"host": [
-						"{{localhost}}{{last_results}}"
+						"{{host}}{{stats}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET specific record",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is ok\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}{{base}}?date=1982-07-24",
+					"host": [
+						"{{host}}{{base}}"
+					],
+					"query": [
+						{
+							"key": "date",
+							"value": "1982-07-24"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET last results",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is ok\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}{{last_results}}",
+					"host": [
+						"{{host}}{{last_results}}"
 					]
 				}
 			},
@@ -21,13 +198,26 @@
 		},
 		{
 			"name": "GET stats",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is ok\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{localhost}}{{stats}}",
+					"raw": "{{host}}{{stats}}",
 					"host": [
-						"{{localhost}}{{stats}}"
+						"{{host}}{{stats}}"
 					]
 				}
 			},
@@ -35,13 +225,26 @@
 		},
 		{
 			"name": "GET URL source",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is ok\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{localhost}}{{source}}",
+					"raw": "{{host}}{{source}}",
 					"host": [
-						"{{localhost}}{{source}}"
+						"{{host}}{{source}}"
 					]
 				}
 			},

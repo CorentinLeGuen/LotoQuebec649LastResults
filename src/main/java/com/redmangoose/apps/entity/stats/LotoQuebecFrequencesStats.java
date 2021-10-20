@@ -1,15 +1,17 @@
-package com.redmangoose.apps.entity;
+package com.redmangoose.apps.entity.stats;
+
+import com.redmangoose.apps.entity.LotoQuebecObject;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class LotoQuebecStatistiques implements LotoQuebecObject {
+public class LotoQuebecFrequencesStats implements LotoQuebecObject {
     private final String tirages;
     private final String date_debut;
     private final String date_fin;
     private final List<LotoQuebecFrequence> numeros;
 
-    public LotoQuebecStatistiques(String tirages, String date_debut, String date_fin) {
+    public LotoQuebecFrequencesStats(String tirages, String date_debut, String date_fin) {
         this.tirages = tirages;
         this.date_debut = date_debut;
         this.date_fin = date_fin;

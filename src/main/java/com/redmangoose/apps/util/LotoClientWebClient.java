@@ -1,22 +1,22 @@
-package com.redmangoose.apps;
+package com.redmangoose.apps.util;
 
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.*;
-import com.redmangoose.apps.entity.LotoQuebecFrequence;
-import com.redmangoose.apps.entity.LotoQuebecStatistiques;
-import com.redmangoose.apps.entity.LotoQuebecTirage;
+import com.gargoylesoftware.htmlunit.html.HtmlDivision;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSpan;
+import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
+import com.redmangoose.apps.entity.last_draw.LotoQuebecTirage;
+import com.redmangoose.apps.entity.stats.LotoQuebecFrequence;
+import com.redmangoose.apps.entity.stats.LotoQuebecFrequencesStats;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
-public class LotoClientService {
-    private final Logger log = LoggerFactory.getLogger(LotoClientService.class);
+public class LotoClientWebClient {
+    private final Logger log = LoggerFactory.getLogger(LotoClientWebClient.class);
 
     private final String LOTO_QUEBEC_LAST_RESULTS_URL = "https://loteries.lotoquebec.com/fr/resultats";
     private final String LOTO_QUEBEC_STATS_URL = "https://loteries.lotoquebec.com/fr/loteries/lotto-6-49?outil=statistiques-212#lqTableauStatsAVie";
@@ -68,7 +68,7 @@ public class LotoClientService {
         }
     }
 
-    public LotoQuebecStatistiques getLastLotoStatistics() {
+    public LotoQuebecFrequencesStats getLastLotoStatistics() {
         try {
             log.debug("Start webclient");
             final WebClient client = new WebClient();
@@ -88,10 +88,10 @@ public class LotoClientService {
             final String date_debut = thirdLineText.split(" ")[1];
             final String date_fin = thirdLineText.split(" ")[3];
 
-            final LotoQuebecStatistiques statistiques = new LotoQuebecStatistiques(tirages, date_debut, date_fin);
+            final LotoQuebecFrequencesStats statistiques = new LotoQuebecFrequencesStats(tirages, date_debut, date_fin);
 
             for (int i = 1; i <= 49; i++) {
-                HtmlTableRow row = (HtmlTableRow)page.getByXPath("/html/body/div[2]/div[2]/section/div[2]/div[4]/div/div/div[2]/div/div[2]/div/div[3]/div[1]/table/tbody/tr[" + i + "]").get(0);
+                HtmlTableRow row = (HtmlTableRow) page.getByXPath("/html/body/div[2]/div[2]/section/div[2]/div[4]/div/div/div[2]/div/div[2]/div/div[3]/div[1]/table/tbody/tr[" + i + "]").get(0);
                 statistiques.addLotoQuebecFrequence(new LotoQuebecFrequence(row.getCell(0).getFirstChild().getTextContent(), row.getCell(1).getFirstChild().getTextContent()));
             }
 

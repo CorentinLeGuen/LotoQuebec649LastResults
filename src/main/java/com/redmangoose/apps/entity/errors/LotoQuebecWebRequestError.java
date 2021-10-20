@@ -1,4 +1,6 @@
-package com.redmangoose.apps.entity;
+package com.redmangoose.apps.entity.errors;
+
+import com.redmangoose.apps.entity.LotoQuebecObject;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
