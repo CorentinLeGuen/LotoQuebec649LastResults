@@ -5,6 +5,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlDivision;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSpan;
 import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
+import com.redmangoose.apps.entity.exception.LotoQuebecBadBindingException;
 import com.redmangoose.apps.entity.last_draw.LotoQuebecTirage;
 import com.redmangoose.apps.entity.stats.LotoQuebecFrequence;
 import com.redmangoose.apps.entity.stats.LotoQuebecFrequencesStats;
@@ -18,13 +19,12 @@ import java.util.Locale;
 public class LotoClientWebClient {
     private final Logger log = LoggerFactory.getLogger(LotoClientWebClient.class);
 
-    private final String DATE_TIME_FORMAT_PATTERN = "dd MMM yyyy";
-    private final String ISO_LOCAL_DATE = "yyyy-MM-dd";
+    private static final String DATE_TIME_FORMAT_PATTERN = "dd MMM yyyy";
+    private static final String ISO_LOCAL_DATE = "yyyy-MM-dd";
 
     public LotoQuebecTirage getLastLotoResults() {
-        try {
+        try (WebClient client = new WebClient()) {
             log.debug("Start webclient");
-            final WebClient client = new WebClient();
             client.getOptions().setCssEnabled(false);
             client.getOptions().setJavaScriptEnabled(false);
             final HtmlPage page = client.getPage(LotoQuebecURLs.LOTO_QUEBEC_LAST_RESULTS_URL.toString());
@@ -38,25 +38,21 @@ public class LotoClientWebClient {
             final String number6 = ((HtmlSpan) page.getByXPath("/html/body/div[2]/div[2]/section/div[2]/div[1]/div/div/div/div/div[1]/div/div[3]/span[11]").get(0)).getFirstChild().getNodeValue();
             final String numberComp = ((HtmlSpan) page.getByXPath("/html/body/div[2]/div[2]/section/div[2]/div[1]/div/div/div/div/div[1]/div/div[3]/span[13]").get(0)).getFirstChild().getNodeValue();
 
-            String date = dateTirage; // We set the date like this just in case the conversion fail
-
-            try {
-                log.debug("Format date before conversion");
-                String datePreFormatted = dateTirage.split(" ")[0] + " " + dateTirage.split(" ")[1].substring(0, 3) + ". " + dateTirage.split(" ")[2];
-                log.debug("Convert date");
-                date = new SimpleDateFormat(ISO_LOCAL_DATE).format(new SimpleDateFormat(DATE_TIME_FORMAT_PATTERN, Locale.FRENCH).parse(datePreFormatted));
-
-            } catch (IndexOutOfBoundsException exception) {
-                log.error("Error while splitting date : '{}'.", date);
-                log.error(exception.getMessage());
-            } catch (ParseException exception) {
-                log.error("Error while parsing the date : '{}'", date);
-                log.error(exception.getMessage());
+            String date = convertingStringFrenchDateToSimpleDate(dateTirage); // We set the date like this just in case the conversion fail
+            if (date == null) {
+                throw new LotoQuebecBadBindingException();
             }
 
-            final LotoQuebecTirage tirage = new LotoQuebecTirage(date, number1, number2, number3, number4, number5, number6, numberComp);
+            final LotoQuebecTirage tirage = new LotoQuebecTirage();
+            tirage.setDateTirage(date);
+            tirage.setNumero1(number1);
+            tirage.setNumero2(number2);
+            tirage.setNumero3(number3);
+            tirage.setNumero4(number4);
+            tirage.setNumero5(number5);
+            tirage.setNumero6(number6);
+            tirage.setNumeroComplementaire(numberComp);
 
-            client.close();
             log.debug("Close webclient");
             return tirage;
         } catch (Exception exception) {
@@ -66,9 +62,8 @@ public class LotoClientWebClient {
     }
 
     public LotoQuebecFrequencesStats getLastLotoStatistics() {
-        try {
+        try (WebClient client = new WebClient()) {
             log.debug("Start webclient");
-            final WebClient client = new WebClient();
             client.getOptions().setCssEnabled(false);
             client.getOptions().setJavaScriptEnabled(false);
             final HtmlPage page = client.getPage(LotoQuebecURLs.LOTO_QUEBEC_STATS_URL.toString());
@@ -76,12 +71,13 @@ public class LotoClientWebClient {
             final String secondLineText = page.getByXPath("/html/body/div[2]/div[2]/section/div[2]/div[4]/div/div/div[2]/div/div[2]/div/div[3]/div[1]/table/thead/tr[1]/th/p/text()[2]").get(0).toString();
             final String thirdLineText = page.getByXPath("/html/body/div[2]/div[2]/section/div[2]/div[4]/div/div/div[2]/div/div[2]/div/div[3]/div[1]/table/thead/tr[1]/th/p/text()[3]").get(0).toString();
 
-            final String tirages = secondLineText.replaceAll("Depuis le début :", "").replaceAll("tirages", "").replaceAll(" ", "");
-            try {
-                Integer.parseInt(tirages);
-            } catch (NumberFormatException exception) {
-                log.error("Extracted value isn't an integer : '{}'", exception.getMessage());
-            }
+            final String tirages = secondLineText
+                    .replace("Depuis le début :", "")
+                    .replace("tirages", "")
+                    .replace(" ", "");
+
+            checkIfIsAnInteger(tirages);
+
             final String date_debut = thirdLineText.split(" ")[1];
             final String date_fin = thirdLineText.split(" ")[3];
 
@@ -91,13 +87,36 @@ public class LotoClientWebClient {
                 HtmlTableRow row = (HtmlTableRow) page.getByXPath("/html/body/div[2]/div[2]/section/div[2]/div[4]/div/div/div[2]/div/div[2]/div/div[3]/div[1]/table/tbody/tr[" + i + "]").get(0);
                 statistiques.addLotoQuebecFrequence(new LotoQuebecFrequence(row.getCell(0).getFirstChild().getTextContent(), row.getCell(1).getFirstChild().getTextContent()));
             }
-
-            client.close();
-            log.debug("Close webclient");
             return statistiques;
         } catch (Exception exception) {
             log.error("An error occurred while retrieving loto stats : '{}'", exception.getMessage());
             return null;
+        } finally {
+            log.debug("Close webclient");
+        }
+    }
+
+    private String convertingStringFrenchDateToSimpleDate(final String dateTirage) {
+        try {
+            log.debug("Format date before conversion");
+            String datePreFormatted = dateTirage.split(" ")[0] + " " + dateTirage.split(" ")[1].substring(0, 3) + ". " + dateTirage.split(" ")[2];
+            log.debug("Convert date");
+            return new SimpleDateFormat(ISO_LOCAL_DATE).format(new SimpleDateFormat(DATE_TIME_FORMAT_PATTERN, Locale.FRENCH).parse(datePreFormatted));
+        } catch (IndexOutOfBoundsException exception) {
+            log.error("Error while splitting date : '{}'.", dateTirage);
+            log.error(exception.getMessage());
+        } catch (ParseException exception) {
+            log.error("Error while parsing the date : '{}'", dateTirage);
+            log.error(exception.getMessage());
+        }
+        return null;
+    }
+
+    private void checkIfIsAnInteger(String tirages) {
+        try {
+            Integer.parseInt(tirages);
+        } catch (NumberFormatException exception) {
+            log.error("Extracted value isn't an integer : '{}'", exception.getMessage());
         }
     }
 }

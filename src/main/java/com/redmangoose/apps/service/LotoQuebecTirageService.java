@@ -21,7 +21,7 @@ public class LotoQuebecTirageService {
 
     public LotoQuebecTirage getTirageByDate(String date) {
         List<LotoQuebecTirage> tirages = repository.findByDateTirage(date);
-        if (tirages == null || tirages.size() == 0) {
+        if (tirages == null || tirages.isEmpty()) {
             return null;
         }
         return tirages.get(0);

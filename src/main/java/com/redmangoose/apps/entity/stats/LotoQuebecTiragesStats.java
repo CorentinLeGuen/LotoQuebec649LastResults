@@ -1,32 +1,36 @@
 package com.redmangoose.apps.entity.stats;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.redmangoose.apps.entity.last_draw.LotoQuebecTirage;
 
 import java.util.List;
 
 public class LotoQuebecTiragesStats {
-    private final int nombre_tirages;
-    private final String date_debut;
-    private final String date_fin;
+    @JsonProperty("nombre_tirages")
+    private final int nombreTirages;
+    @JsonProperty("date_debut")
+    private final String dateDebut;
+    @JsonProperty("date_fin")
+    private final String dateFin;
     private final List<LotoQuebecTirage> tirages;
 
-    public LotoQuebecTiragesStats(String date_debut, String date_fin, Iterable<LotoQuebecTirage> tirages) {
-        this.date_debut = date_debut;
-        this.date_fin = date_fin;
+    public LotoQuebecTiragesStats(String dateDebut, String dateFin, Iterable<LotoQuebecTirage> tirages) {
+        this.dateDebut = dateDebut;
+        this.dateFin = dateFin;
         this.tirages = (List<LotoQuebecTirage>) tirages;
-        this.nombre_tirages = this.tirages.size();
+        this.nombreTirages = this.tirages.size();
     }
 
-    public int getNombre_tirages() {
-        return nombre_tirages;
+    public int getNombreTirages() {
+        return nombreTirages;
     }
 
-    public String getDate_debut() {
-        return date_debut;
+    public String getDateDebut() {
+        return dateDebut;
     }
 
-    public String getDate_fin() {
-        return date_fin;
+    public String getDateFin() {
+        return dateFin;
     }
 
     public List<LotoQuebecTirage> getTirages() {

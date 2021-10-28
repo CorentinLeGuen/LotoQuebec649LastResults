@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface LotoQuebecTirageRepository extends CrudRepository<LotoQuebecTirage, Integer> {
-    @Query("SELECT t FROM LotoQuebecTirage t WHERE t.date_tirage = ?1")
+    @Query("SELECT t FROM LotoQuebecTirage t WHERE t.dateTirage = ?1")
     List<LotoQuebecTirage> findByDateTirage(String date);
 
     @Query(nativeQuery = true, value = "SELECT TOP 1 DATE_TIRAGE FROM TIRAGE ORDER BY DATE_TIRAGE")

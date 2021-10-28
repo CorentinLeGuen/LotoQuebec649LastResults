@@ -26,6 +26,7 @@ import java.util.Map;
 @Controller
 @RequestMapping("loto")
 public class LotoQuebecController {
+    public static final String TIMESTAMP = "timestamp";
     private final Logger log = LoggerFactory.getLogger(LotoQuebecController.class);
 
     private final LotoQuebecTirageService service;
@@ -38,8 +39,8 @@ public class LotoQuebecController {
     public @ResponseBody
     ResponseEntity<LotoQuebecObject> getLastDraw() {
         log.info("Asking last results");
-        LotoClientWebClient service = new LotoClientWebClient();
-        LotoQuebecTirage tirage = service.getLastLotoResults();
+        LotoClientWebClient serviceClient = new LotoClientWebClient();
+        LotoQuebecTirage tirage = serviceClient.getLastLotoResults();
         if (tirage == null) {
             log.error("Unable to retrieve results");
             return new ResponseEntity<>(new LotoQuebecWebRequestError(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -51,8 +52,8 @@ public class LotoQuebecController {
     public @ResponseBody
     ResponseEntity<LotoQuebecObject> getStats() {
         log.info("Asking for stats");
-        LotoClientWebClient service = new LotoClientWebClient();
-        LotoQuebecFrequencesStats stats = service.getLastLotoStatistics();
+        LotoClientWebClient serviceClient = new LotoClientWebClient();
+        LotoQuebecFrequencesStats stats = serviceClient.getLastLotoStatistics();
         if (stats == null) {
             log.error("Unable to get stats results");
             return new ResponseEntity<>(new LotoQuebecWebRequestError(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -64,9 +65,8 @@ public class LotoQuebecController {
     public @ResponseBody
     ResponseEntity<Map<String, String>> getResultSources() {
         log.info("Asking the URL source");
-        LotoClientWebClient service = new LotoClientWebClient();
         Map<String, String> result = new HashMap<>();
-        result.put("timestamp", LocalDateTime.now().toString());
+        result.put(TIMESTAMP, LocalDateTime.now().toString());
         result.put("/loto/last", LotoQuebecURLs.LOTO_QUEBEC_LAST_RESULTS_URL.toString());
         result.put("/loto/stats", LotoQuebecURLs.LOTO_QUEBEC_STATS_URL.toString());
         result.put("/loto?date=yyyy-MM-dd", LotoQuebecURLs.LOTO_QUEBEC_RESULTS_URL.toString());
@@ -84,7 +84,7 @@ public class LotoQuebecController {
             LocalDate.parse(date);
         } catch (DateTimeParseException ex) {
             Map<String, String> errors = new HashMap<>();
-            errors.put("timestamp", LocalDateTime.now().toString());
+            errors.put(TIMESTAMP, LocalDateTime.now().toString());
             errors.put("status", "400");
             errors.put("message", "Bad date format");
             return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
@@ -92,7 +92,7 @@ public class LotoQuebecController {
         LotoQuebecTirage tirage = service.getTirageByDate(date);
         if (tirage == null) {
             Map<String, String> errors = new HashMap<>();
-            errors.put("timestamp", LocalDateTime.now().toString());
+            errors.put(TIMESTAMP, LocalDateTime.now().toString());
             errors.put("status", "404");
             errors.put("message", "No record for date '" + date + "' found");
             return new ResponseEntity<>(errors, HttpStatus.NOT_FOUND);

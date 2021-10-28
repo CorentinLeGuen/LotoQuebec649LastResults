@@ -1,5 +1,6 @@
 package com.redmangoose.apps.entity.stats;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.redmangoose.apps.entity.LotoQuebecObject;
 
 import java.util.LinkedList;
@@ -7,14 +8,16 @@ import java.util.List;
 
 public class LotoQuebecFrequencesStats implements LotoQuebecObject {
     private final String tirages;
-    private final String date_debut;
-    private final String date_fin;
+    @JsonProperty("date_debut")
+    private final String dateDebut;
+    @JsonProperty("date_fin")
+    private final String dateFin;
     private final List<LotoQuebecFrequence> numeros;
 
-    public LotoQuebecFrequencesStats(String tirages, String date_debut, String date_fin) {
+    public LotoQuebecFrequencesStats(String tirages, String dateDebut, String dateFin) {
         this.tirages = tirages;
-        this.date_debut = date_debut;
-        this.date_fin = date_fin;
+        this.dateDebut = dateDebut;
+        this.dateFin = dateFin;
         this.numeros = new LinkedList<>();
     }
 
@@ -22,12 +25,12 @@ public class LotoQuebecFrequencesStats implements LotoQuebecObject {
         return tirages;
     }
 
-    public String getDate_debut() {
-        return date_debut;
+    public String getDateDebut() {
+        return dateDebut;
     }
 
-    public String getDate_fin() {
-        return date_fin;
+    public String getDateFin() {
+        return dateFin;
     }
 
     public void addLotoQuebecFrequence(LotoQuebecFrequence frequence) {

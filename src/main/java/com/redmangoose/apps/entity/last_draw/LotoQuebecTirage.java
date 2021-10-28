@@ -1,82 +1,120 @@
 package com.redmangoose.apps.entity.last_draw;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.redmangoose.apps.entity.LotoQuebecObject;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "tirage")
 public class LotoQuebecTirage implements LotoQuebecObject {
     @Id
     @GeneratedValue
+    @JsonIgnore
     private int id;
-    private String date_tirage;
-    private String numero_1;
-    private String numero_2;
-    private String numero_3;
-    private String numero_4;
-    private String numero_5;
-    private String numero_6;
-    private String numero_complementaire;
 
-    public LotoQuebecTirage() {
+    @JsonProperty("date_tirage")
+    @Column(name = "date_tirage")
+    private String dateTirage;
+
+    @JsonProperty("numero_1")
+    @Column(name = "numero_1")
+    private String numero1;
+
+    @JsonProperty("numero_2")
+    @Column(name = "numero_2")
+    private String numero2;
+
+    @JsonProperty("numero_3")
+    @Column(name = "numero_3")
+    private String numero3;
+
+    @JsonProperty("numero_4")
+    @Column(name = "numero_4")
+    private String numero4;
+
+    @JsonProperty("numero_5")
+    @Column(name = "numero_5")
+    private String numero5;
+
+    @JsonProperty("numero_6")
+    @Column(name = "numero_6")
+    private String numero6;
+
+    @JsonProperty("numero_complementaire")
+    @Column(name = "numero_complementaire")
+    private String numeroComplementaire;
+
+    public int getId() {
+        return id;
     }
 
-    public LotoQuebecTirage(String date_tirage, String numero_1, String numero_2, String numero_3, String numero_4, String numero_5, String numero_6, String numero_complementaire) {
-        this.date_tirage = date_tirage;
-        this.numero_1 = numero_1;
-        this.numero_2 = numero_2;
-        this.numero_3 = numero_3;
-        this.numero_4 = numero_4;
-        this.numero_5 = numero_5;
-        this.numero_6 = numero_6;
-        this.numero_complementaire = numero_complementaire;
-    }
-
-    public LotoQuebecTirage(int id, String date_tirage, String numero_1, String numero_2, String numero_3, String numero_4, String numero_5, String numero_6, String numero_complementaire) {
+    public void setId(int id) {
         this.id = id;
-        this.date_tirage = date_tirage;
-        this.numero_1 = numero_1;
-        this.numero_2 = numero_2;
-        this.numero_3 = numero_3;
-        this.numero_4 = numero_4;
-        this.numero_5 = numero_5;
-        this.numero_6 = numero_6;
-        this.numero_complementaire = numero_complementaire;
     }
 
-    public String getDate_tirage() {
-        return date_tirage;
+    public String getDateTirage() {
+        return dateTirage;
     }
 
-    public String getNumero_1() {
-        return numero_1;
+    public void setDateTirage(String dateTirage) {
+        this.dateTirage = dateTirage;
     }
 
-    public String getNumero_2() {
-        return numero_2;
+    public String getNumero1() {
+        return numero1;
     }
 
-    public String getNumero_3() {
-        return numero_3;
+    public void setNumero1(String numero1) {
+        this.numero1 = numero1;
     }
 
-    public String getNumero_4() {
-        return numero_4;
+    public String getNumero2() {
+        return numero2;
     }
 
-    public String getNumero_5() {
-        return numero_5;
+    public void setNumero2(String numero2) {
+        this.numero2 = numero2;
     }
 
-    public String getNumero_6() {
-        return numero_6;
+    public String getNumero3() {
+        return numero3;
     }
 
-    public String getNumero_complementaire() {
-        return numero_complementaire;
+    public void setNumero3(String numero3) {
+        this.numero3 = numero3;
+    }
+
+    public String getNumero4() {
+        return numero4;
+    }
+
+    public void setNumero4(String numero4) {
+        this.numero4 = numero4;
+    }
+
+    public String getNumero5() {
+        return numero5;
+    }
+
+    public void setNumero5(String numero5) {
+        this.numero5 = numero5;
+    }
+
+    public String getNumero6() {
+        return numero6;
+    }
+
+    public void setNumero6(String numero6) {
+        this.numero6 = numero6;
+    }
+
+    public String getNumeroComplementaire() {
+        return numeroComplementaire;
+    }
+
+    public void setNumeroComplementaire(String numeroComplementaire) {
+        this.numeroComplementaire = numeroComplementaire;
     }
 }
