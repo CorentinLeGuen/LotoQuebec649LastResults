@@ -8,6 +8,10 @@ Everything is in [pom.xml](pom.xml).
 
 `mvn clean compile assembly:single`
 
+## Sonar
+
+`mvn clean verify sonar:sonar -Dsonar.host.url=<url> -Dsonar.login=<token>`
+
 ## How to use
 
 You can find the postman collection [here](/postman/).
