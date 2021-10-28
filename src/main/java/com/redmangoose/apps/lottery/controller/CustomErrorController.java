@@ -1,4 +1,4 @@
-package com.redmangoose.apps.controller;
+package com.redmangoose.apps.lottery.controller;
 
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-public class LotoQuebecErrorController implements ErrorController {
+public class CustomErrorController implements ErrorController {
     @GetMapping(value = "/error", produces = "application/json")
     public Map<String, String> error() {
         Map<String, String> errors = new HashMap<>();

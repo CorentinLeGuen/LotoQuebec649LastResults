@@ -1,14 +1,13 @@
-package com.redmangoose.apps.entity.last_draw;
+package com.redmangoose.apps.lottery.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.redmangoose.apps.entity.LotoQuebecObject;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "tirage")
-public class LotoQuebecTirage implements LotoQuebecObject {
+public class Draw implements LotteryObject{
     @Id
     @GeneratedValue
     @JsonIgnore

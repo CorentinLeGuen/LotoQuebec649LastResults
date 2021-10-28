@@ -1,4 +1,4 @@
-package com.redmangoose.apps;
+package com.redmangoose.apps.lottery;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

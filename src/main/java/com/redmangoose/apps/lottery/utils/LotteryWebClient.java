@@ -1,33 +1,36 @@
-package com.redmangoose.apps.util;
+package com.redmangoose.apps.lottery.utils;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlDivision;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSpan;
 import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
-import com.redmangoose.apps.entity.exception.LotoQuebecBadBindingException;
-import com.redmangoose.apps.entity.last_draw.LotoQuebecTirage;
-import com.redmangoose.apps.entity.stats.LotoQuebecFrequence;
-import com.redmangoose.apps.entity.stats.LotoQuebecFrequencesStats;
+import com.redmangoose.apps.lottery.entity.Draw;
+import com.redmangoose.apps.lottery.entity.Frequency;
+import com.redmangoose.apps.lottery.entity.LotteryObject;
+import com.redmangoose.apps.lottery.entity.Statistics;
+import com.redmangoose.apps.lottery.exception.BadBindingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 
-public class LotoClientWebClient {
-    private final Logger log = LoggerFactory.getLogger(LotoClientWebClient.class);
+public class LotteryWebClient {
+    private final Logger log = LoggerFactory.getLogger(LotteryWebClient.class);
 
     private static final String DATE_TIME_FORMAT_PATTERN = "dd MMM yyyy";
     private static final String ISO_LOCAL_DATE = "yyyy-MM-dd";
 
-    public LotoQuebecTirage getLastLotoResults() {
+    public Draw getLastLotoResults() {
         try (WebClient client = new WebClient()) {
             log.debug("Start webclient");
             client.getOptions().setCssEnabled(false);
             client.getOptions().setJavaScriptEnabled(false);
-            final HtmlPage page = client.getPage(LotoQuebecURLs.LOTO_QUEBEC_LAST_RESULTS_URL.toString());
+            final HtmlPage page = client.getPage(LotteryURLs.LOTO_QUEBEC_LAST_RESULTS_URL.toString());
             log.debug("Retreive XPaths");
             final String dateTirage = ((HtmlDivision) page.getByXPath("/html/body/div[2]/div[2]/section/div[2]/div[1]/div/div/div/div/div[1]/div/div[2]/div[2]/div/div").get(0)).getFirstChild().getNodeValue();
             final String number1 = ((HtmlSpan) page.getByXPath("/html/body/div[2]/div[2]/section/div[2]/div[1]/div/div/div/div/div[1]/div/div[3]/span[1]").get(0)).getFirstChild().getNodeValue();
@@ -40,10 +43,10 @@ public class LotoClientWebClient {
 
             String date = convertingStringFrenchDateToSimpleDate(dateTirage); // We set the date like this just in case the conversion fail
             if (date == null) {
-                throw new LotoQuebecBadBindingException();
+                throw new BadBindingException();
             }
 
-            final LotoQuebecTirage tirage = new LotoQuebecTirage();
+            final Draw tirage = new Draw();
             tirage.setDateTirage(date);
             tirage.setNumero1(number1);
             tirage.setNumero2(number2);
@@ -61,12 +64,12 @@ public class LotoClientWebClient {
         }
     }
 
-    public LotoQuebecFrequencesStats getLastLotoStatistics() {
+    public Statistics getLastLotoStatistics() {
         try (WebClient client = new WebClient()) {
             log.debug("Start webclient");
             client.getOptions().setCssEnabled(false);
             client.getOptions().setJavaScriptEnabled(false);
-            final HtmlPage page = client.getPage(LotoQuebecURLs.LOTO_QUEBEC_STATS_URL.toString());
+            final HtmlPage page = client.getPage(LotteryURLs.LOTO_QUEBEC_STATS_URL.toString());
             log.debug("Retreive XPaths");
             final String secondLineText = page.getByXPath("/html/body/div[2]/div[2]/section/div[2]/div[4]/div/div/div[2]/div/div[2]/div/div[3]/div[1]/table/thead/tr[1]/th/p/text()[2]").get(0).toString();
             final String thirdLineText = page.getByXPath("/html/body/div[2]/div[2]/section/div[2]/div[4]/div/div/div[2]/div/div[2]/div/div[3]/div[1]/table/thead/tr[1]/th/p/text()[3]").get(0).toString();
@@ -81,13 +84,12 @@ public class LotoClientWebClient {
             final String date_debut = thirdLineText.split(" ")[1];
             final String date_fin = thirdLineText.split(" ")[3];
 
-            final LotoQuebecFrequencesStats statistiques = new LotoQuebecFrequencesStats(tirages, date_debut, date_fin);
-
+            List<LotteryObject> frequencies = new LinkedList<>();
             for (int i = 1; i <= 49; i++) {
                 HtmlTableRow row = (HtmlTableRow) page.getByXPath("/html/body/div[2]/div[2]/section/div[2]/div[4]/div/div/div[2]/div/div[2]/div/div[3]/div[1]/table/tbody/tr[" + i + "]").get(0);
-                statistiques.addLotoQuebecFrequence(new LotoQuebecFrequence(row.getCell(0).getFirstChild().getTextContent(), row.getCell(1).getFirstChild().getTextContent()));
+                frequencies.add(new Frequency(row.getCell(0).getFirstChild().getTextContent(), row.getCell(1).getFirstChild().getTextContent()));
             }
-            return statistiques;
+            return new Statistics(date_debut, date_fin, frequencies);
         } catch (Exception exception) {
             log.error("An error occurred while retrieving loto stats : '{}'", exception.getMessage());
             return null;

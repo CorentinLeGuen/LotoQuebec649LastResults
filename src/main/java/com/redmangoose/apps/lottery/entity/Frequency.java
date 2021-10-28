@@ -1,10 +1,10 @@
-package com.redmangoose.apps.entity.stats;
+package com.redmangoose.apps.lottery.entity;
 
-public class LotoQuebecFrequence {
+public class Frequency implements LotteryObject {
     private final String numero;
     private final String frequence;
 
-    public LotoQuebecFrequence(String numero, String frequence) {
+    public Frequency(String numero, String frequence) {
         this.numero = numero;
         this.frequence = frequence;
     }
