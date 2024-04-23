@@ -1,7 +1,5 @@
 # Loto Québec 6.49 - Webservices
 
-Application is deployed on Heroku here : [loto-quebec-last-draw.herokuapp.com/loto/last](https://loto-quebec-last-draw.herokuapp.com/loto/last).
-
 ## How to install
 
 Everything is in [pom.xml](pom.xml).
